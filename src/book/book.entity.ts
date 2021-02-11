@@ -14,9 +14,8 @@ export class Booktbl extends BaseEntity {
   @Column({ type: 'varchar', length: 500 })
   description: string;
 
-  @ManyToMany(type => Usertbl, user => user.books, { eager: true, primary: true})
-  @JoinColumn()
-  authors: Usertbl[];
+  @Column()
+  authors: string;
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;

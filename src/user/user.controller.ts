@@ -30,7 +30,5 @@ export class UserController {
     @Delete(':id')
     removeStore(@Param('id') storeid: string) {
         return this.userService.DeleteUser(storeid)
-
-
     }
 }

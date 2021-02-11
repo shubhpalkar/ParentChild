@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { stringify } from 'querystring';
+import { UserBookService } from 'src/user-book/user-book.service';
 import { Repository } from 'typeorm';
 import { Usertbl } from './user.entity';
 
 @Injectable()
 export class UserService {
-    constructor (@InjectRepository(Usertbl) private userRepo: Repository<Usertbl>){}
+    constructor (@InjectRepository(Usertbl) private userRepo: Repository<Usertbl>, 
+    private ubService: UserBookService){}
 
     insertUser(user: Usertbl): Promise<any>{
         const newUser = this.userRepo.save(user);
@@ -24,14 +27,18 @@ export class UserService {
     }
 
 
-    getUpdateStore(id:string,user: Usertbl) : Promise<any>{
+    getUpdateStore(id:string,user: Usertbl) {
         const checkID = this.userRepo.findOne(id)
         
         if (!checkID) {
             throw new Error("User is not found......");
         }
         
-        return this.userRepo.update(id, user);
+          this.userRepo.update(id, user);
+          HttpStatus.OK
+          console.log("Usertbl", id, user)          
+
+          this.ubService.UpdateFromUser(id, user)
     }
 
     DeleteUser(id: string) {
@@ -42,7 +49,10 @@ export class UserService {
             throw new Error("User is not found ....");
         }
 
-        return this.userRepo.delete(id);
+     this.userRepo.delete(id);
+     HttpStatus.OK
+
+     this.ubService.deleteubUser(id)
     }
 
 }

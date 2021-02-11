@@ -37,8 +37,7 @@ export class BookController {
     @Delete(':id')
     removeStore(@Param('id') id: string) {
         return this.serviceBook.DeleteBook(id)
-
-
     }
+
 }
 

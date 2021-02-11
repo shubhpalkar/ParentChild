@@ -1,29 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { query } from 'express';
+import { UserBook } from 'src/user-book/user-book.entity';
+import { UserBookModule } from 'src/user-book/user-book.module';
+import { UserBookService } from 'src/user-book/user-book.service';
 import { Usertbl } from 'src/user/user.entity';
-import { In, Repository } from 'typeorm';
+import { createQueryBuilder, EntityManager, getManager, In, Repository } from 'typeorm';
 import { Booktbl } from './book.entity';
 import { ReadBookDTO } from './ReadBookDto';
 
 @Injectable()
 export class BookService {
 
-    constructor ( @InjectRepository(Booktbl) private BookRepo: Repository<Booktbl>,
-        @InjectRepository(Usertbl) private userRepo: Repository<Usertbl>
-   ){}
+    constructor(@InjectRepository(Booktbl) private BookRepo: Repository<Booktbl>
+        , private ubService: UserBookService) { }
 
-    async getBookByAuthor(authodId: string): Promise<any>{
+    async getBookByAuthor(authodId: string): Promise<any> {
 
         const Booktbl: Booktbl[] = await this.BookRepo.createQueryBuilder('Booktbl')
-                 .leftJoinAndSelect("books.authors", "users")
-                 .where('books.status = :status',{status : "ACTIVE"})
-                 .andWhere("users.id = :id ", { id: authodId })
-                  .getMany();
+            .leftJoinAndSelect("books.authors", "users")
+            .where('books.status = :status', { status: "ACTIVE" })
+            .andWhere("users.id = :id ", { id: authodId })
+            .getMany();
 
         console.log(Booktbl);
         return Booktbl;
-        
-        // return Booktbl.map( Booktbl => plainToClass (ReadBookDTO, Booktbl));
     }
 
     insertBook(book: Booktbl): Promise<any> {
@@ -31,35 +32,43 @@ export class BookService {
         return newBook;
     }
 
-    findAllBook(){
+    findAllBook() {
         return this.BookRepo.find();
     }
 
 
     getSingleBook(id: string) {
-        return this.BookRepo.findOne({where: id})
+        return this.BookRepo.findOne({ where: id })
     }
 
 
-    getUpdateBook(id:string,Book: Booktbl) : Promise<any>{
-        const checkID = this.BookRepo.findOne(id)
-        
+    getUpdateBook(id: string, Book: Booktbl) {
+        const checkID = this.BookRepo.findOne(id).then
+
         if (!checkID) {
             throw new Error("Book is not found......");
         }
-        
-        return this.BookRepo.update(id, Book);
+
+        this.BookRepo.update(id, Book);
+
+        HttpStatus.OK
+
+        this.ubService.updatefromBook(id, Book)
     }
 
     DeleteBook(id: string) {
 
         const data = this.BookRepo.findOne(id);
 
-        if (!data){
+        if (!data) {
             throw new Error("Book is not found ....");
         }
 
-        return this.BookRepo.delete(id);
+        this.BookRepo.delete(id);
+        HttpStatus.MOVED_PERMANENTLY;
+
+        this.ubService.deletedetailBook(id);
     }
 
 }
+
