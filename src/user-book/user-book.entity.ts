@@ -1,7 +1,7 @@
 import { Usertbl } from "src/user/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
+@Entity('UserBooks')
 export class UserBook {
     @PrimaryGeneratedColumn()
     hasBookId: number
@@ -11,9 +11,6 @@ export class UserBook {
 
     @Column()
     BookName: string
-
-    @Column()
-    Author: string
 
     @Column()
     userId: number
@@ -27,10 +24,10 @@ export class UserBook {
     @Column({ default: false })
     BookIssue: boolean
 
-    @Column()
-    issueDate: Date;
-
-    @Column()
-    receiveDate: Date;
-
+    @CreateDateColumn({ type: 'timestamp', name: 'created_atUserBook' })
+    createdAtUserBook: Date;
+  
+    @UpdateDateColumn({ type: 'timestamp', name: 'updated_atUserBook' })
+    updatedAtUserBook: Date;
 }
+

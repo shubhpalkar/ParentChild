@@ -24,7 +24,7 @@ export class UserBookService {
     }
 
     getAllData(): Promise<UserBook[]> {
-        console.log ("UserBook get data")
+        // console.log ("UserBook get data")
         return this.uerbookRepo.find()
     }
 
@@ -43,7 +43,7 @@ export class UserBookService {
          }
 
          this.uerbookRepo.createQueryBuilder().update(UserBook)
-         .set({BookName: Book.name, Author: Book.authors})
+         .set({BookName: Book.name})
          .where({Bookid: id})
          .execute();
     }

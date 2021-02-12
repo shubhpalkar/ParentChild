@@ -2,7 +2,7 @@ import { Usertbl } from "src/user/user.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { UpdateDateColumn } from "typeorm/decorator/columns/UpdateDateColumn";
 
-@Entity('Booktbl')
+@Entity('Books')
 export class Booktbl extends BaseEntity {
 
   @PrimaryGeneratedColumn('increment')
@@ -20,9 +20,9 @@ export class Booktbl extends BaseEntity {
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;
 
-  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamp', name: 'created_atBook' })
+  createdAtBook: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp', name: 'updated_atBook' })
+  updatedAtBook: Date;
 }

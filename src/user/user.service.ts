@@ -36,9 +36,9 @@ export class UserService {
         
           this.userRepo.update(id, user);
           HttpStatus.OK
-          console.log("Usertbl", id, user)          
 
-          this.ubService.UpdateFromUser(id, user)
+         this.ubService.UpdateFromUser(id, user)
+         
     }
 
     DeleteUser(id: string) {

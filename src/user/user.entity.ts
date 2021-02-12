@@ -1,10 +1,10 @@
 import { Booktbl } from "src/book/book.entity";
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserBook } from '../user-book/user-book.entity'
 
-@Entity('Usertbl')
-export class Usertbl extends BaseEntity{
-    @PrimaryGeneratedColumn('increment')
+@Entity('Users')
+export class Usertbl extends BaseEntity {
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ type: 'varchar', unique: true, length: 25, nullable: false })
@@ -15,6 +15,12 @@ export class Usertbl extends BaseEntity{
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
+
+  @CreateDateColumn({ type: 'timestamp', name: 'created_atUser' })
+  createdAtUser: Date;
+
+  @CreateDateColumn({ type: 'timestamp', name: 'updated_atUser' })
+  updatedAtUser: Date;
 
 }
 
